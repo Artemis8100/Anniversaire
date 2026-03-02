@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Expérience Vidéo</title>
     <style>
-        /* Style pour un écran noir total */
         body, html { 
             margin: 0; 
             padding: 0; 
@@ -22,11 +21,10 @@
         video {
             width: 100%;
             height: 100%;
-            object-fit: contain; /* 'contain' pour voir toute l'image, 'cover' pour remplir tout l'écran */
-            display: none; /* Caché au début */
+            object-fit: cover; /* Change en 'contain' si tu veux voir les bords de la vidéo */
+            display: none;
         }
 
-        /* Bouton de lancement stylisé */
         #overlay {
             text-align: center;
             color: white;
@@ -58,7 +56,6 @@
 
     <video id="myVideo" playsinline>
         <source src="video.mp4" type="video/mp4">
-        Votre navigateur ne supporte pas la vidéo.
     </video>
 
     <script>
@@ -67,31 +64,23 @@
             var overlay = document.getElementById("overlay");
             var docElm = document.documentElement;
 
-            // 1. Passage en mode Plein Écran (Mode Cinéma)
+            // Passage en Plein Écran
             if (docElm.requestFullscreen) {
                 docElm.requestFullscreen();
-            } else if (docElm.mozRequestFullScreen) { /* Firefox */
-                docElm.mozRequestFullScreen();
-            } else if (docElm.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+            } else if (docElm.webkitRequestFullscreen) {
                 docElm.webkitRequestFullscreen();
-            } else if (docElm.msRequestFullscreen) { /* IE/Edge */
-                docElm.msRequestFullscreen();
             }
 
-            // 2. Lancement de la vidéo avec le son
             overlay.style.display = "none";
             vid.style.display = "block";
+            
+            // On s'assure que le son est activé
+            vid.muted = false; 
             vid.play();
         }
 
-        // Relancer la vidéo si elle s'arrête (optionnel)
-        document.getElementById("myVideo").onended = function() {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            }
-            overlay.style.display = "block";
-            this.style.display = "none";
-        };
+        // On ne fait RIEN à la fin de la vidéo (on supprime la fonction onended précédente)
+        // La vidéo restera naturellement sur sa dernière image.
     </script>
 </body>
 </html>
