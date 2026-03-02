@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Expérience Vidéo</title>
+    <style>
+        /* Style pour un écran noir total */
+        body, html { 
+            margin: 0; 
+            padding: 0; 
+            height: 100%; 
+            width: 100%; 
+            overflow: hidden; 
+            background-color: black; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: sans-serif;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* 'contain' pour voir toute l'image, 'cover' pour remplir tout l'écran */
+            display: none; /* Caché au début */
+        }
+
+        /* Bouton de lancement stylisé */
+        #overlay {
+            text-align: center;
+            color: white;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .play-button {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            border: 2px solid white;
+        }
+    </style>
+</head>
+<body onclick="startExperience()">
+
+    <div id="overlay">
+        <div class="play-button">
+            <div style="width: 0; height: 0; border-top: 15px solid transparent; border-bottom: 15px solid transparent; border-left: 25px solid white; margin-left: 5px;"></div>
+        </div>
+        <p style="letter-spacing: 1px; font-weight: 300;">TOUCHEZ POUR LANCER</p>
+    </div>
+
+    <video id="myVideo" playsinline>
+        <source src="video.mp4" type="video/mp4">
+        Votre navigateur ne supporte pas la vidéo.
+    </video>
+
+    <script>
+        function startExperience() {
+            var vid = document.getElementById("myVideo");
+            var overlay = document.getElementById("overlay");
+            var docElm = document.documentElement;
+
+            // 1. Passage en mode Plein Écran (Mode Cinéma)
+            if (docElm.requestFullscreen) {
+                docElm.requestFullscreen();
+            } else if (docElm.mozRequestFullScreen) { /* Firefox */
+                docElm.mozRequestFullScreen();
+            } else if (docElm.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+                docElm.webkitRequestFullscreen();
+            } else if (docElm.msRequestFullscreen) { /* IE/Edge */
+                docElm.msRequestFullscreen();
+            }
+
+            // 2. Lancement de la vidéo avec le son
+            overlay.style.display = "none";
+            vid.style.display = "block";
+            vid.play();
+        }
+
+        // Relancer la vidéo si elle s'arrête (optionnel)
+        document.getElementById("myVideo").onended = function() {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+            overlay.style.display = "block";
+            this.style.display = "none";
+        };
+    </script>
+</body>
+</html>
